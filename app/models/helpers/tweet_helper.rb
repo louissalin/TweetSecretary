@@ -1,0 +1,2 @@
+class TweetHelper
+end
