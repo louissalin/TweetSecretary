@@ -1,7 +1,7 @@
 Tweetdisplay::Application.routes.draw do
   #get \"users\/show\"
 
-  root :to => "home#index"
+  root :to => "tweet#index"
 
   devise_for :users
   resources :users, :only => :show
