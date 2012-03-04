@@ -5,6 +5,7 @@ Tweetdisplay::Application.routes.draw do
 
   devise_for :users
   resources :users, :only => :show
+  resources :tweets, :only => [:index, :show, :create, :update]
 
 
   # The priority is based upon order of creation:

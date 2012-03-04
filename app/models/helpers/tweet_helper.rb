@@ -1,6 +1,7 @@
 class TweetHelper
-    def create_tweet(originator, text, retweet_count = 0, is_my_reply = false)
+    def create_tweet(id, originator, text, retweet_count = 0, is_my_reply = false)
         attrs = {
+            :tweet_id => id,
             :text => text,
             :urls => extract_urls(text),
             :pruned_text => prune_text(text),

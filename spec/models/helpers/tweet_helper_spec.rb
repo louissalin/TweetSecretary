@@ -4,6 +4,7 @@ require 'helpers/tweet_helper.rb'
 describe TweetHelper do
     describe "creating a tweet" do
         before (:all) do
+            @id = '123'
             @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
             @originator = "my_friend"
             @retweet_count = 0
@@ -13,10 +14,12 @@ describe TweetHelper do
         end
 
         before (:each) do
-            @tweet = @helper.create_tweet @originator, @text, @retweet_count, @is_my_reply
+            @tweet = @helper.create_tweet @id, @originator, @text, @retweet_count, 
+                                          @is_my_reply
         end
 
         it "should extract attributes from a regular tweet" do
+            @tweet.tweet_id.should == @id
             @tweet.text.should == @text
             @tweet.pruned_text.should == "check out what did It's amazing"
             @tweet.originator.should == @originator
