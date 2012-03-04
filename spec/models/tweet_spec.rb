@@ -6,11 +6,11 @@ describe Tweet do
       :text => 'this is a tweet: http://btl.ly/bla',
       :pruned_text => 'this is a tweet',
       :originator => '@lonestardev',
-      :reply_to = '',
+      :reply_to => '',
       :retweet_count => 0,
       :urls => nil,
-      :is_my_reply = false,
-      :mentions = nil
+      :is_my_reply => false,
+      :mentions => nil
     }
   end
   
