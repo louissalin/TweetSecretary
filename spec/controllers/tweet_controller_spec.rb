@@ -32,7 +32,6 @@ describe TweetController do
                 @originator = "my_friend"
                 @retweet_count = 0
                 @is_my_reply = true
-
             end
 
             before (:each) do
@@ -45,7 +44,11 @@ describe TweetController do
 
             it "should show the tweet" do
                 response.should be_successful
-                response.body.should == 'json'
+                response.body.should == @tweet.to_v1_json
+            end
+
+            it "should not include the mongo ID in the json response" do
+                response.body.index('"_id":"').should == nil
             end
 
             it "should have the proper media type" do
@@ -59,7 +62,7 @@ describe TweetController do
             end
 
             it "should save the tweet" 
-            it "shouldn't add if tweet id is alread present"
+            it "shouldn't add if tweet id is already present"
         end
     end
 end

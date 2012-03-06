@@ -11,6 +11,6 @@ class Tweet
   field :mentions, :type => Hash
 
   def to_v1_json
-      'json'
+      self.to_json(:only => [:text, :pruned_text, :originator, :reply_to, :retweet_count, :urls, :is_my_reply, :mentions])
   end
 end
