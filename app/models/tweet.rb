@@ -9,4 +9,8 @@ class Tweet
   field :urls, :type => Hash
   field :is_my_reply, :type => Boolean
   field :mentions, :type => Hash
+
+  def to_v1_json
+      'json'
+  end
 end
