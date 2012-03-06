@@ -57,8 +57,25 @@ describe TweetController do
         end
 
         describe "POST 'create'" do
-            it "should be successful" do
+            before (:each) do
+                @id = '123'
+                @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
+                @originator = "my_friend"
+                @retweet_count = 0
+                @is_my_reply = true
+            end
+
+            it "should be respond with json" do
+                tweet_json = {:is_my_reply => true,
+                              :originator => "my_friend",
+                              :reply_to => "lonestardev",
+                              :retweet_count => 0,
+                              :text => "@lonestardev check out what @buddy did: bit.ly/1234. It\'s amazing!"
+                             }.to_json
+
+                post :create, :tweet => tweet_json
                 response.should be_successful
+                response.body.index(tweet_json).should >= 0
             end
 
             it "should save the tweet" 
