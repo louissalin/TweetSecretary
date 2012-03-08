@@ -1,5 +1,5 @@
 class TweetHelper
-    def create_tweet(id, originator, text, retweet_count = 0, is_my_reply = false)
+    def self.create_tweet(id, originator, text, retweet_count = 0, is_my_reply = false)
         attrs = {
             :tweet_id => id,
             :text => text,
@@ -17,7 +17,7 @@ class TweetHelper
 
 private
     URL_REGEX = /\s(http(s)?:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/)?([\S]*[^\.|\s])?/
-    def prune_text(text)
+    def self.prune_text(text)
         text.gsub(/@([^\s])+\s/, '')
             .gsub(URL_REGEX, '')
             .gsub(/[.|,|!|@|:|?|>|<|\||\[|\]|\{|\}|"|;|#|%|^|&|*|\(|\)|-|_|=|+]/, ' ')
@@ -25,16 +25,16 @@ private
             .strip
     end
 
-    def extract_urls(text)
+    def self.extract_urls(text)
         url_parts = text.scan URL_REGEX
         url_parts.map {|p| p.join('')}
     end
 
-    def extract_reply_to(text)
+    def self.extract_reply_to(text)
         /^@\S+/.match(text)[0][1..-1]
     end
 
-    def extract_mentions(text)
+    def self.extract_mentions(text)
         text.scan(/@\S+/).map {|m| m[1..-1].strip}
     end
 end

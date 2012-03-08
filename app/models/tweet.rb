@@ -1,6 +1,7 @@
 class Tweet
   include Mongoid::Document
 
+  field :tweet_id, :type => String
   field :text, :type => String
   field :pruned_text, :type => String
   field :originator, :type => String
@@ -11,6 +12,6 @@ class Tweet
   field :mentions, :type => Hash
 
   def to_v1_json
-      self.to_json(:only => [:text, :pruned_text, :originator, :reply_to, :retweet_count, :urls, :is_my_reply, :mentions])
+      self.to_json(:only => [:tweet_id, :text, :pruned_text, :originator, :reply_to, :retweet_count, :urls, :is_my_reply, :mentions])
   end
 end

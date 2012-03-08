@@ -35,8 +35,8 @@ describe TweetController do
             end
 
             before (:each) do
-                @tweet = TweetHelper.new.create_tweet @id, @originator, @text, 
-                                                      @retweet_count, @is_my_reply
+                @tweet = TweetHelper.create_tweet @id, @originator, @text, 
+                                                  @retweet_count, @is_my_reply
                 @tweet.save
 
                 get 'show', :id => '123', :format => :v1_json
@@ -66,16 +66,23 @@ describe TweetController do
             end
 
             it "should be respond with json" do
-                tweet_json = {:is_my_reply => true,
-                              :originator => "my_friend",
-                              :reply_to => "lonestardev",
-                              :retweet_count => 0,
-                              :text => "@lonestardev check out what @buddy did: bit.ly/1234. It\'s amazing!"
-                             }.to_json
+                tweet = {:tweet_id => "123",
+                         :is_my_reply => true,
+                         :originator => "my_friend",
+                         :reply_to => "lonestardev",
+                         :retweet_count => 0,
+                         :text => "@lonestardev check out what @buddy did: bit.ly/1234. It\'s amazing!"
+                             }
 
-                post :create, :tweet => tweet_json
+                post :create, :tweet => tweet.to_json, :format => :v1_json
+
                 response.should be_successful
-                response.body.index(tweet_json).should >= 0
+                response.body.index(tweet[:tweet_id].to_json).should >= 0
+                response.body.index(tweet[:is_my_reply].to_json).should >= 0
+                response.body.index(tweet[:originator].to_json).should >= 0
+                response.body.index(tweet[:reply_to].to_json).should >= 0
+                response.body.index(tweet[:retweet_count].to_json).should >= 0
+                response.body.index(tweet[:text].to_json).should >= 0
             end
 
             it "should save the tweet" 

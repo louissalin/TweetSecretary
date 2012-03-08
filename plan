@@ -1,0 +1,1 @@
+remove "is_my_reply" from this app. Users should edit their profile and add their twitter handle. Then we can add "is_my_reply" to the mongo doc if the "reply_to" and user profile handle match.

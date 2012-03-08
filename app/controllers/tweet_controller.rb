@@ -7,6 +7,21 @@ class TweetController < ApplicationController
     end
 
     def create
+        t = JSON.parse(params[:tweet])
+
+        tweet_id = t['tweet_id']
+        is_my_reply = t['is_my_reply']
+        originator = t['originator']
+        reply_to = t['reply_to']
+        retweet_count = t['retweet_count']
+        text = t['text']
+
+        @tweet = TweetHelper.create_tweet tweet_id, originator, text, retweet_count, is_my_reply
+        @tweet.save
+
+        respond_to do |format|
+            format.v1_json { render :v1_json => @tweet }
+        end
     end
 
     def show
