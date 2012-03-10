@@ -16,8 +16,11 @@ class TweetController < ApplicationController
         retweet_count = t['retweet_count']
         text = t['text']
 
-        @tweet = TweetHelper.create_tweet tweet_id, originator, text, retweet_count, is_my_reply
-        @tweet.save
+        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
+        if @tweet == nil
+            @tweet = TweetHelper.create_tweet tweet_id, originator, text, retweet_count, is_my_reply
+            @tweet.save
+        end
 
         respond_to do |format|
             format.v1_json { render :v1_json => @tweet }

@@ -63,30 +63,44 @@ describe TweetController do
                 @originator = "my_friend"
                 @retweet_count = 0
                 @is_my_reply = true
+
+                @tweet = {
+                    :tweet_id => @id,
+                    :is_my_reply => @is_my_reply,
+                    :originator => @originator,
+                    :reply_to => "lonestardev",
+                    :retweet_count => @retweet_count,
+                    :text => @text
+                }
             end
 
             it "should be respond with json" do
-                tweet = {:tweet_id => "123",
-                         :is_my_reply => true,
-                         :originator => "my_friend",
-                         :reply_to => "lonestardev",
-                         :retweet_count => 0,
-                         :text => "@lonestardev check out what @buddy did: bit.ly/1234. It\'s amazing!"
-                             }
-
-                post :create, :tweet => tweet.to_json, :format => :v1_json
-
-                response.should be_successful
-                response.body.index(tweet[:tweet_id].to_json).should >= 0
-                response.body.index(tweet[:is_my_reply].to_json).should >= 0
-                response.body.index(tweet[:originator].to_json).should >= 0
-                response.body.index(tweet[:reply_to].to_json).should >= 0
-                response.body.index(tweet[:retweet_count].to_json).should >= 0
-                response.body.index(tweet[:text].to_json).should >= 0
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                test_tweet_response
             end
 
-            it "should save the tweet" 
-            it "shouldn't add if tweet id is already present"
+            it "should save the tweet" do
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                get 'show', :id => '123', :format => :v1_json
+                test_tweet_response
+            end
+
+            it "shouldn't add if tweet id is already present" do
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+
+                Tweet.count.should == 1
+            end
+        end
+
+        def test_tweet_response
+            response.should be_successful
+            response.body.index(@tweet[:tweet_id].to_json).should >= 0
+            response.body.index(@tweet[:is_my_reply].to_json).should >= 0
+            response.body.index(@tweet[:originator].to_json).should >= 0
+            response.body.index(@tweet[:reply_to].to_json).should >= 0
+            response.body.index(@tweet[:retweet_count].to_json).should >= 0
+            response.body.index(@tweet[:text].to_json).should >= 0
         end
     end
 end
