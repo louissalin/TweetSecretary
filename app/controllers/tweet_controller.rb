@@ -17,23 +17,20 @@ class TweetController < ApplicationController
         retweet_count = t['retweet_count']
         text = t['text']
 
+        error = nil
+
         @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
         if @tweet == nil
             @tweet = TweetHelper.create_tweet tweet_id, originator, text, retweet_count, is_my_reply
             @tweet.save
         else
-            render :v1_json => @tweet
             error = get_error '405',
                               'cannot create tweet',
                               "tweet with id #{tweet_id} already exists"
-
-            
-            response.body = '{"error":' + error.to_json + ',' + '"content":' + response.body + '}'
-            return
         end
 
         respond_to do |format|
-            format.v1_json { render :v1_json => @tweet }
+            format.v1_json { render :v1_json => @tweet, :error => error }
             format.any { render :v1_json => @tweet, :status => 415 }
         end
     end
@@ -44,8 +41,6 @@ class TweetController < ApplicationController
         respond_to do |format|
             format.v1_json { render :v1_json => @tweet }
         end
-
-        response.body = '{"content":' + response.body + '}'
    end
 
 private
@@ -59,7 +54,18 @@ private
 end
 
 ActionController::Renderers.add(:v1_json) do |obj, options|
-    json = obj.to_v1_json
     self.content_type ||= Mime::Type.lookup('application/vnd.tweetsecretary-v1+json')
-    self.response_body = json
+
+    body = '{'
+    if options[:error] != nil
+        error = options[:error]
+        error = error.to_json unless error.respond_to?(:to_str)
+
+        body += '"error":' + error + ','
+    end
+
+    body += '"content":' + obj.to_v1_json
+    body += '}'
+
+    self.response_body = body 
 end

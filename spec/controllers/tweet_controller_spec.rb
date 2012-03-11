@@ -44,7 +44,6 @@ describe TweetController do
 
             it "should show the tweet" do
                 response.should be_successful
-                pp response.body
                 content.to_json.should == @tweet.to_v1_json
             end
 
