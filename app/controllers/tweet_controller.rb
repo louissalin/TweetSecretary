@@ -30,8 +30,8 @@ class TweetController < ApplicationController
         end
 
         respond_to do |format|
-            format.v1_json { render :v1_json => @tweet, :error => error }
-            format.any { render :v1_json => @tweet, :status => 415 }
+            format.v1_json { render v1_json: @tweet, error: error }
+            format.any { render v1_json: @tweet, status: 415 }
         end
     end
 
@@ -39,7 +39,7 @@ class TweetController < ApplicationController
         @tweet = Tweet.first(conditions: {tweet_id: "#{params[:id]}"})
 
         respond_to do |format|
-            format.v1_json { render :v1_json => @tweet }
+            format.v1_json { render v1_json: @tweet }
         end
    end
 
