@@ -63,12 +63,13 @@ describe TweetController do
                 @originator = "my_friend"
                 @retweet_count = 0
                 @is_my_reply = true
+                @reply_to = 'lonestardev'
 
                 @tweet = {
                     :tweet_id => @id,
                     :is_my_reply => @is_my_reply,
                     :originator => @originator,
-                    :reply_to => "lonestardev",
+                    :reply_to => @reply_to,
                     :retweet_count => @retweet_count,
                     :text => @text
                 }
@@ -104,12 +105,12 @@ describe TweetController do
 
         def test_tweet_response
             response.should be_successful
-            body.to_json.index(@tweet[:tweet_id].to_json).should >= 0
-            body.to_json.index(@tweet[:is_my_reply].to_json).should >= 0
-            body.to_json.index(@tweet[:originator].to_json).should >= 0
-            body.to_json.index(@tweet[:reply_to].to_json).should >= 0
-            body.to_json.index(@tweet[:retweet_count].to_json).should >= 0
-            body.to_json.index(@tweet[:text].to_json).should >= 0
+            tweet['tweet_id'].should == @id
+            tweet['is_my_reply'].should == @is_my_reply
+            tweet['originator'].should == @originator
+            tweet['reply_to'].should == @reply_to
+            tweet['retweet_count'].should == @retweet_count
+            tweet['text'].should == @text
         end
     end
 
@@ -123,5 +124,9 @@ describe TweetController do
 
     def error
         body['error']
+    end
+
+    def tweet
+        content['tweet']
     end
 end
