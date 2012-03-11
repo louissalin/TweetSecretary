@@ -1,5 +1,5 @@
 class TweetHelper
-    def self.create_tweet(id, originator, text, retweet_count = 0, is_my_reply = false)
+    def self.create_tweet(current_user, id, originator, text, retweet_count = 0)
         attrs = {
             :tweet_id => id,
             :text => text,
@@ -8,7 +8,7 @@ class TweetHelper
             :originator => originator,
             :reply_to => extract_reply_to(text),
             :retweet_count => retweet_count,
-            :is_my_reply => is_my_reply,
+            :is_my_reply => is_my_reply(current_user, text),
             :mentions => extract_mentions(text),
         }
 
@@ -36,5 +36,10 @@ private
 
     def self.extract_mentions(text)
         text.scan(/@\S+/).map {|m| m[1..-1].strip}
+    end
+
+    def self.is_my_reply(current_user, text)
+        reply_to = extract_reply_to(text)
+        reply_to == current_user.twitter_handle
     end
 end

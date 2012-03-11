@@ -23,6 +23,9 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
+  ## Twitter handle
+  field :twitter_handle,     :type => String, :null => false
+
   ## Encryptable
   # field :password_salt, :type => String
 
@@ -40,8 +43,8 @@ class User
   ## Token authenticatable
   # field :authentication_token, :type => String
   field :name
-  validates_presence_of :name
+  validates_presence_of :name, :twitter_handle
   validates_uniqueness_of :name, :email, :case_sensitive => false
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :twitter_handle
 end
 

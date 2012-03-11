@@ -20,6 +20,5 @@ Feature: Sign in
       Given I exist as a user
         And I am not logged in
       When I sign in with valid credentials
-      Then I see a successful sign in message
-      When I return to the site
+       And I return to the site
       Then I should be signed in

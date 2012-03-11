@@ -6,6 +6,7 @@ describe User do
     @attr = { 
       :name => "Example User",
       :email => "user@example.com",
+      :twitter_handle => "somehandle",
       :password => "foobar",
       :password_confirmation => "foobar"
     }
@@ -26,6 +27,11 @@ describe User do
       valid_email_user = User.new(@attr.merge(:email => address))
       valid_email_user.should be_valid
     end
+  end
+  
+  it "should require a twitter handle" do
+    no_twitter_user = User.new(@attr.merge(:twitter_handle => ""))
+    no_twitter_user.should_not be_valid
   end
   
   it "should reject invalid email addresses" do

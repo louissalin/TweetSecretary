@@ -8,14 +8,15 @@ describe TweetHelper do
             @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
             @originator = "my_friend"
             @retweet_count = 0
-            @is_my_reply = true
-
-            @helper = TweetHelper.new
         end
 
         before (:each) do
-            @tweet = @helper.create_tweet @id, @originator, @text, @retweet_count, 
-                                          @is_my_reply
+            user = Factory.create(:user, 
+                                  :name => 'lp',
+                                  :email => 'lp@lp.com', 
+                                  :twitter_handle => 'lonestardev')
+
+            @tweet = TweetHelper.create_tweet user, @id, @originator, @text, @retweet_count
         end
 
         it "should extract attributes from a regular tweet" do
@@ -25,7 +26,7 @@ describe TweetHelper do
             @tweet.originator.should == @originator
             @tweet.reply_to.should == "lonestardev"
             @tweet.retweet_count.should == @retweet_count
-            @tweet.is_my_reply.should == @is_my_reply
+            @tweet.is_my_reply.should == true
             @tweet.urls[0].should == "bit.ly/1234"
             @tweet.mentions[0].should == "lonestardev"
             @tweet.mentions[1].should == "buddy"

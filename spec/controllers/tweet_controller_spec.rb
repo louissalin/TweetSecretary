@@ -31,12 +31,11 @@ describe TweetController do
                 @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
                 @originator = "my_friend"
                 @retweet_count = 0
-                @is_my_reply = true
             end
 
             before (:each) do
-                @tweet = TweetHelper.create_tweet @id, @originator, @text, 
-                                                  @retweet_count, @is_my_reply
+                @tweet = TweetHelper.create_tweet @user, @id, @originator, @text, 
+                                                  @retweet_count
                 @tweet.save
 
                 get 'show', :id => '123', :format => :v1_json
@@ -62,12 +61,10 @@ describe TweetController do
                 @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
                 @originator = "my_friend"
                 @retweet_count = 0
-                @is_my_reply = true
                 @reply_to = 'lonestardev'
 
                 @tweet = {
                     :tweet_id => @id,
-                    :is_my_reply => @is_my_reply,
                     :originator => @originator,
                     :reply_to => @reply_to,
                     :retweet_count => @retweet_count,
@@ -101,12 +98,23 @@ describe TweetController do
                 error['message'].should == 'cannot create tweet'
                 error['description'].should == 'tweet with id 123 already exists'
             end
+
+            it "should figure out if the tweet was a reply to me" do
+                sign_out @user
+                user = Factory.create(:user, 
+                                      :name => 'lp',
+                                      :email => 'lp@lp.com', 
+                                      :twitter_handle => 'lonestardev')
+                sign_in user
+                
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                tweet['is_my_reply'].should == true
+            end
         end
 
         def test_tweet_response
             response.should be_successful
             tweet['tweet_id'].should == @id
-            tweet['is_my_reply'].should == @is_my_reply
             tweet['originator'].should == @originator
             tweet['reply_to'].should == @reply_to
             tweet['retweet_count'].should == @retweet_count

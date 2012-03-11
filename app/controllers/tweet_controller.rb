@@ -9,9 +9,7 @@ class TweetController < ApplicationController
 
     def create
         t = JSON.parse(params[:tweet])
-
         tweet_id = t['tweet_id']
-        is_my_reply = t['is_my_reply']
         originator = t['originator']
         reply_to = t['reply_to']
         retweet_count = t['retweet_count']
@@ -21,7 +19,7 @@ class TweetController < ApplicationController
 
         @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
         if @tweet == nil
-            @tweet = TweetHelper.create_tweet tweet_id, originator, text, retweet_count, is_my_reply
+            @tweet = TweetHelper.create_tweet current_user, tweet_id, originator, text, retweet_count
             @tweet.save
         else
             error = get_error '405',
