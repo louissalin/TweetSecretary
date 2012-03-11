@@ -44,11 +44,12 @@ describe TweetController do
 
             it "should show the tweet" do
                 response.should be_successful
-                response.body.should == @tweet.to_v1_json
+                pp response.body
+                content.to_json.should == @tweet.to_v1_json
             end
 
             it "should not include the mongo ID in the json response" do
-                response.body.index('"_id":"').should == nil
+                content.key('"_id":"').should == nil
             end
 
             it "should have the proper media type" do
@@ -74,6 +75,12 @@ describe TweetController do
                 }
             end
 
+            it "should return a 415 unsupported media type if not proper format" do
+                post :create, :tweet => @tweet.to_json, :format => :html
+                response.should_not be_successful
+                response.code.should == '415'
+            end
+
             it "should be respond with json" do
                 post :create, :tweet => @tweet.to_json, :format => :v1_json
                 test_tweet_response
@@ -90,17 +97,32 @@ describe TweetController do
                 post :create, :tweet => @tweet.to_json, :format => :v1_json
 
                 Tweet.count.should == 1
+                error['code'].should == "405"
+                error['message'].should == 'cannot create tweet'
+                error['description'].should == 'tweet with id 123 already exists'
             end
         end
 
         def test_tweet_response
             response.should be_successful
-            response.body.index(@tweet[:tweet_id].to_json).should >= 0
-            response.body.index(@tweet[:is_my_reply].to_json).should >= 0
-            response.body.index(@tweet[:originator].to_json).should >= 0
-            response.body.index(@tweet[:reply_to].to_json).should >= 0
-            response.body.index(@tweet[:retweet_count].to_json).should >= 0
-            response.body.index(@tweet[:text].to_json).should >= 0
+            body.to_json.index(@tweet[:tweet_id].to_json).should >= 0
+            body.to_json.index(@tweet[:is_my_reply].to_json).should >= 0
+            body.to_json.index(@tweet[:originator].to_json).should >= 0
+            body.to_json.index(@tweet[:reply_to].to_json).should >= 0
+            body.to_json.index(@tweet[:retweet_count].to_json).should >= 0
+            body.to_json.index(@tweet[:text].to_json).should >= 0
         end
+    end
+
+    def body 
+        body = JSON.parse(response.body)
+    end
+
+    def content
+        body['content']
+    end
+
+    def error
+        body['error']
     end
 end
