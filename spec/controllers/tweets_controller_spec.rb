@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'helpers/tweet_helper.rb'
 
-describe TweetController do
-    describe "when not logged in" do
+describe TweetsController do
+    describe "when not logged in on the site" do
         describe "GET 'index'" do
             it "should be successful" do
                 get 'index'
@@ -19,7 +19,7 @@ describe TweetController do
         end
     end
 
-    describe "when logged in" do
+    describe "when logged in on the site" do
         before (:each) do
             @user = Factory.create(:user)
             sign_in @user
@@ -53,6 +53,13 @@ describe TweetController do
             it "should have the proper media type" do
                 response.content_type.should == 'application/vnd.tweetsecretary-v1+json'
             end
+        end
+    end
+
+    describe "when using the API" do
+        before (:each) do
+            @user = Factory.create(:user)
+            sign_in @user
         end
 
         describe "POST 'create'" do
