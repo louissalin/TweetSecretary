@@ -1,1 +1,3 @@
-return failure when not authenticated for POST/create
+display tweets
+add user id to tweets for when we go multi-user
+improve authentication with token strategy, or use https. Investigate.
