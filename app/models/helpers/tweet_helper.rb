@@ -31,7 +31,13 @@ private
     end
 
     def self.extract_reply_to(text)
-        /^@\S+/.match(text)[0][1..-1]
+        matches = /^@\S+/.match(text)
+
+        if matches != nil
+            matches[0][1..-1]
+        else
+            nil
+        end
     end
 
     def self.extract_mentions(text)
@@ -40,6 +46,6 @@ private
 
     def self.is_my_reply(current_user, text)
         reply_to = extract_reply_to(text)
-        reply_to == current_user.twitter_handle
+        reply_to.blank? || reply_to == current_user.twitter_handle
     end
 end
