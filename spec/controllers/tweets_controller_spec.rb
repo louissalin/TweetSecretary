@@ -129,6 +129,23 @@ describe TweetsController do
         end
     end
 
+    #describe "when testing complex tweets" do
+        #before (:each) do
+            #@user = Factory.create(:user)
+            #sign_in @user
+        #end
+
+        #describe "POST 'create'" do
+            #it "should work" do
+                #tweet = "{\"tweet_id\":\"179450071027425280\",\"originator\":\"haacked\",\"reply_to\":\"robconery\",\"retweet_count\":0,\"text\":\"@robconery It's shit developers who write software say: http://t.co/Ac6HYjwP\n:) :)\"}"
+
+                #pp tweet
+                #post :create, :tweet => tweet, :format => :v1_json
+                #response.should be_successful
+            #end
+        #end
+    #end
+
     def body 
         body = JSON.parse(response.body)
     end

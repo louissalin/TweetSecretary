@@ -1,3 +1,8 @@
 display tweets
+    look up originator via twitter api to get display name, avatar. Cache and use for display.
+
 add user id to tweets for when we go multi-user
+    use token to get user id and add to tweet
+
 improve authentication with token strategy, or use https. Investigate.
+
