@@ -1,8 +1,9 @@
 %h3 Tweet Secretary
 
 - if user_signed_in?
-  - @tweets.each do |tweet|
-    .tweet
-      = tweet.text
+  .row
+    - @tweets.each do |tweet|
+      .tweet.offset1
+        = tweet.text
 - else
   .content please sign in to view your tweets
