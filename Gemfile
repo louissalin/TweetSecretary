@@ -26,7 +26,6 @@ group :development do
     gem "guard-livereload", ">= 0.3.0"
     gem "guard-rspec", ">= 0.4.3"
     gem "spork"
-    gem "httparty"
 end
 
 group :test do

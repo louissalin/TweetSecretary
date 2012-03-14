@@ -2,9 +2,12 @@ class TweetsController < ApplicationController
     skip_before_filter :authenticate_user!, :only => :index
 
     respond_to :v1_json
-    respond_to :html, :only => [:show, :index]
+    respond_to :html, :only => [:index]
 
     def index
+        # show login page if user not logged in
+        # else show html page with initial payload of tweets in json format
+        # the page will have javascript to load tweets are they come in (eventually...)
     end
 
     def create
