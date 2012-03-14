@@ -25,7 +25,6 @@ group :development do
     gem "guard-rails", ">= 0.0.3"
     gem "guard-livereload", ">= 0.3.0"
     gem "guard-rspec", ">= 0.4.3"
-    gem "guard-cucumber", ">= 0.6.1"
     gem "spork"
     gem "httparty"
 end
@@ -35,7 +34,6 @@ group :test do
     gem "database_cleaner", ">= 0.7.0"
     gem "mongoid-rspec", ">= 1.4.4"
     gem "factory_girl_rails", ">= 1.4.0"
-    gem "cucumber-rails", ">= 1.2.0"
     gem "capybara", ">= 1.1.2"
     gem "launchy", ">= 2.0.5"
 end
