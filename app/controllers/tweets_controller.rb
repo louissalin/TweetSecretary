@@ -8,6 +8,8 @@ class TweetsController < ApplicationController
         # show login page if user not logged in
         # else show html page with initial payload of tweets in json format
         # the page will have javascript to load tweets are they come in (eventually...)
+
+        @tweets = Tweet.limit(20)
     end
 
     def create

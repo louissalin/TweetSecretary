@@ -1,2 +1,8 @@
-%h3 Home
+%h3 Tweet Secretary
 
+- if user_signed_in?
+  - @tweets.each do |tweet|
+    .tweet
+      = tweet.text
+- else
+  .content please sign in to view your tweets
