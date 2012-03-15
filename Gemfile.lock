@@ -100,9 +100,6 @@ GEM
       rubyzip
       term-ansicolor (~> 1.0.5)
     hike (1.2.1)
-    httparty (0.8.1)
-      multi_json
-      multi_xml
     i18n (0.6.0)
     journey (1.0.1)
     jquery-rails (2.0.0)
@@ -135,7 +132,6 @@ GEM
       mongoid (~> 2.0)
       rspec (~> 2)
     multi_json (1.0.4)
-    multi_xml (0.4.1)
     nokogiri (1.5.0)
     orm_adapter (0.0.6)
     polyglot (0.3.3)
@@ -240,7 +236,6 @@ DEPENDENCIES
   haml (>= 3.1.2)
   haml-rails (>= 0.3.4)
   heroku
-  httparty
   jquery-rails
   launchy (>= 2.0.5)
   libnotify

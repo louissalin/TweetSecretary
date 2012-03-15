@@ -1,9 +1,13 @@
-%h3 Tweet Secretary
-
 - if user_signed_in?
   .row
-    - @tweets.each do |tweet|
-      .tweet.offset1
-        = tweet.text
+    .filtered.tweet.span6
+      %h3 Filtered
+      - @tweets.each do |tweet|
+        %p #{tweet.originator}: #{tweet.text}
+
+    .skipped.tweet.span6
+      %h3 Unfiltered
+      - @tweets.each do |tweet|
+        %p #{tweet.originator}: #{tweet.text}
 - else
   .content please sign in to view your tweets
