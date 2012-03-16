@@ -67,7 +67,7 @@ ActionController::Renderers.add(:v1_json) do |obj, options|
         body += '"error":' + error + ','
     end
 
-    body += '"content":' + obj.to_v1_json
+    body += '"content":' + obj.to_v1.to_json
     body += '}'
 
     self.response_body = body 

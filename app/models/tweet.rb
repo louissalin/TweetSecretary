@@ -11,11 +11,19 @@ class Tweet
   field :is_my_reply, :type => Boolean
   field :mentions, :type => Hash
 
-  def to_v1_json
-      '{"tweet":' + 
-          self.to_json(:only => [:tweet_id, :text, :pruned_text, :originator, 
-                                 :reply_to, :retweet_count, :urls, :is_my_reply, :mentions]
-                      ) +
-      '}'
+  def to_v1
+      {tweet: 
+          {
+            tweet_id: self.tweet_id,
+            text: self.text,
+            pruned_text: self.pruned_text,
+            originator: self.originator,
+            reply_to: self.reply_to,
+            retweet_count: self.retweet_count,
+            urls: self.urls,
+            is_my_reply: self.is_my_reply,
+            mentions: self.mentions
+          }
+      }
   end
 end

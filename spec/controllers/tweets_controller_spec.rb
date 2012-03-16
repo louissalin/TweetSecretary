@@ -43,7 +43,7 @@ describe TweetsController do
 
             it "should show the tweet" do
                 response.should be_successful
-                content.to_json.should == @tweet.to_v1_json
+                content.to_json.should == @tweet.to_v1.to_json
             end
 
             it "should not include the mongo ID in the json response" do
