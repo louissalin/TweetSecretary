@@ -3,11 +3,11 @@
     .filtered.tweet.span6
       %h3 Filtered
       - @tweets.each do |tweet|
-        %p #{tweet.originator}: #{tweet.text}
+        = render partial: "tweets/tweet", locals: { :tweet => tweet }
 
     .skipped.tweet.span6
       %h3 Unfiltered
       - @tweets.each do |tweet|
-        %p #{tweet.originator}: #{tweet.text}
+        = render partial: "tweets/tweet", locals: { :tweet => tweet }
 - else
   .content please sign in to view your tweets
