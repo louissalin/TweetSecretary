@@ -156,7 +156,7 @@ describe TweetsController do
                 }
 
                 post :create, :tweet => @tweet.to_json, :format => :v1_json
-                post :like, :tweet_id => @tweet[:tweet_id], :format => :v1_json
+                post :like, :id => @tweet[:tweet_id], :format => :v1_json
             end
 
             it "should be respond with json" do
@@ -164,13 +164,13 @@ describe TweetsController do
             end
 
             it "should return a 415 unsupported media type if not proper format" do
-                post :like, :tweet_id => @tweet[:tweet_id], :format => :html
+                post :like, :id => @tweet[:tweet_id], :format => :html
                 response.should_not be_successful
                 response.code.should == '415'
             end
 
             it "should return a 404 if tweet not found" do
-                post :like, :tweet_id => '555', :format => :v1_json
+                post :like, :id => '555', :format => :v1_json
 
                 error['code'].should == "404"
                 error['message'].should == 'cannot find tweet'
@@ -178,6 +178,11 @@ describe TweetsController do
             end
 
             it "should set the tweet status to 'liked'" do
+                tweet['status'].should == 'liked'
+            end
+
+            it "should save the tweet" do
+                get 'show', :id => '123', :format => :v1_json
                 tweet['status'].should == 'liked'
             end
 
@@ -204,7 +209,7 @@ describe TweetsController do
                 }
 
                 post :create, :tweet => @tweet.to_json, :format => :html
-                post :dislike, :tweet_id => @tweet[:tweet_id], :format => :v1_json
+                post :dislike, :id => @tweet[:tweet_id], :format => :v1_json
             end
 
             it "should be respond with json" do
@@ -212,13 +217,13 @@ describe TweetsController do
             end
 
             it "should return a 415 unsupported media type if not proper format" do
-                post :like, :tweet_id => @tweet[:tweet_id], :format => :html
+                post :like, :id => @tweet[:tweet_id], :format => :html
                 response.should_not be_successful
                 response.code.should == '415'
             end
 
             it "should return a 404 if tweet not found" do
-                post :dislike, :tweet_id => '555', :format => :v1_json
+                post :dislike, :id => '555', :format => :v1_json
 
                 error['code'].should == "404"
                 error['message'].should == 'cannot find tweet'
@@ -226,6 +231,11 @@ describe TweetsController do
             end
 
             it "should set the tweet status to 'disliked'" do
+                tweet['status'].should == 'disliked'
+            end
+
+            it "should save the tweet" do
+                get 'show', :id => '123', :format => :v1_json
                 tweet['status'].should == 'disliked'
             end
 

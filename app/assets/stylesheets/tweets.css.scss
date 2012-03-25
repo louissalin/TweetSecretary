@@ -1,0 +1,20 @@
+.tweet {
+    padding: 5px;
+
+    .originator {
+        font: {
+            size: 1.1em;
+            weight: bold;
+        }
+    }
+
+    .actions a {
+        background-color: #08B;
+        clear: both;
+        color: white;
+        display: block;
+        padding: 1px;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2)
+    }
+}
+

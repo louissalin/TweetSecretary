@@ -11,3 +11,31 @@
         = render partial: "tweets/tweet", locals: { :tweet => tweet }
 - else
   .content please sign in to view your tweets
+
+:javascript
+  $.ajaxSetup({
+    type: "POST",
+    contentType: "application/vnd.tweetsecretary-v1+json"
+  });
+
+  function like(tweet_id, tweet_path) {
+    $.ajax({
+      url: tweet_path + 'like',
+      success: function(data) {
+        $('#tweet_' + tweet_id + ' a')
+          .html('Dislike')
+          .attr('onclick', "dislike('" + tweet_id + "', '" + tweet_path + "'); return false;");
+      }
+    });
+  }
+
+  function dislike(tweet_id, tweet_path) {
+    $.ajax({
+      url: tweet_path + 'dislike',
+      success: function(data) {
+        $('#tweet_' + tweet_id + ' a')
+          .html('Like')
+          .attr('onclick', "like('" + tweet_id + "', '" + tweet_path + "'); return false;");
+      }
+    });
+  }

@@ -5,7 +5,12 @@ Tweetdisplay::Application.routes.draw do
 
   devise_for :users
   resources :users, :only => :show
-  resources :tweets, :only => [:index, :show, :create, :update]
+  resources :tweets, :only => [:index, :show, :create, :update] do
+      member do
+          post 'like'
+          post 'dislike'
+      end
+  end
 
 
   # The priority is based upon order of creation:

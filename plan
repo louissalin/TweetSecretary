@@ -1,5 +1,5 @@
-display tweets
-    look up originator via twitter api to get display name, avatar. Cache and use for display.
+come up with strategy for ajax calls in haml views. I don't like cramming stuff in "onclick"
+look up originator via twitter api to get display name, avatar. Cache and use for display.
 
 add user id to tweets for when we go multi-user
     use token to get user id and add to tweet

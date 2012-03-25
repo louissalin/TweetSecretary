@@ -39,11 +39,13 @@ class TweetsController < ApplicationController
     end
 
     def like
-        perform_action_on_tweet {|tweet| tweet.like}
+        tweet_id = params[:id]
+        update_tweet_params(tweet_id) {|tweet| tweet.like}
     end
 
     def dislike
-        perform_action_on_tweet {|tweet| tweet.dislike}
+        tweet_id = params[:id]
+        update_tweet_params(tweet_id) {|tweet| tweet.dislike}
     end
 
     def show
@@ -63,8 +65,7 @@ private
         }
     end
 
-    def perform_action_on_tweet
-        tweet_id = params[:tweet_id]
+    def update_tweet_params(tweet_id)
         @tweet = find_tweet(tweet_id)
 
         if @tweet == nil
@@ -73,6 +74,7 @@ private
                               "tweet with id #{tweet_id} cannot be found"
         else
             yield @tweet
+            @tweet.save
         end
 
         respond_to do |format|
