@@ -31,6 +31,10 @@ describe TweetHelper do
             @tweet.mentions[0].should == "lonestardev"
             @tweet.mentions[1].should == "buddy"
         end
+
+        it "should set the status of the tweet to 'unknown'" do
+            @tweet.status.should == 'unknown'
+        end
     end
 
     describe "creating a tweet with missing mentions" do

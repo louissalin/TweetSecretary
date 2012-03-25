@@ -1,5 +1,6 @@
 class Tweet
   include Mongoid::Document
+  include Rails.application.routes.url_helpers
 
   field :tweet_id, :type => String
   field :text, :type => String
@@ -10,6 +11,15 @@ class Tweet
   field :urls, :type => Hash
   field :is_my_reply, :type => Boolean
   field :mentions, :type => Hash
+  field :status, :type => String
+
+  def like
+      self.status = 'liked'
+  end
+
+  def dislike
+      self.status = 'disliked'
+  end
 
   def to_v1
       {tweet: 
@@ -22,8 +32,24 @@ class Tweet
             retweet_count: self.retweet_count,
             urls: self.urls,
             is_my_reply: self.is_my_reply,
-            mentions: self.mentions
+            mentions: self.mentions,
+            status: self.status,
+            actions: get_actions
           }
       }
+  end
+
+private
+  def get_actions
+      actions = []
+      if status == 'unknown' || status == 'disliked'
+          actions << { url: "#{tweet_path(self.tweet_id)}/like", rel: 'like' }
+      end
+
+      if status == 'unknown' || status == 'liked'
+          actions << { url: "#{tweet_path(self.tweet_id)}/dislike", rel: 'dislike' }
+      end
+
+      actions
   end
 end

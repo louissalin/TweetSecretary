@@ -53,6 +53,15 @@ describe TweetsController do
             it "should have the proper media type" do
                 response.content_type.should == 'application/vnd.tweetsecretary-v1+json'
             end
+
+            it "should give the option to like the tweet" do
+                actions.count.should == 2
+                actions[0]['url'].should == "#{Rails.application.routes.url_helpers.tweet_path(@id)}/like"
+            end
+
+            it "should give the option to dislike the tweet" do
+                actions[1]['url'].should == "#{Rails.application.routes.url_helpers.tweet_path(@id)}/dislike"
+            end
         end
     end
 
@@ -117,6 +126,113 @@ describe TweetsController do
                 post :create, :tweet => @tweet.to_json, :format => :v1_json
                 tweet['is_my_reply'].should == true
             end
+
+            it "should give the option to like the tweet" do
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                actions.count.should == 2
+                actions[0]['url'].should == "#{Rails.application.routes.url_helpers.tweet_path(@id)}/like"
+            end
+
+            it "should give the option to dislike the tweet" do
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                actions[1]['url'].should == "#{Rails.application.routes.url_helpers.tweet_path(@id)}/dislike"
+            end
+        end
+
+        describe "POST 'like'" do
+            before (:each) do
+                @id = '123'
+                @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
+                @originator = "my_friend"
+                @retweet_count = 0
+                @reply_to = 'lonestardev'
+
+                @tweet = {
+                    :tweet_id => @id,
+                    :originator => @originator,
+                    :reply_to => @reply_to,
+                    :retweet_count => @retweet_count,
+                    :text => @text
+                }
+
+                post :create, :tweet => @tweet.to_json, :format => :v1_json
+                post :like, :tweet_id => @tweet[:tweet_id], :format => :v1_json
+            end
+
+            it "should be respond with json" do
+                test_tweet_response
+            end
+
+            it "should return a 415 unsupported media type if not proper format" do
+                post :like, :tweet_id => @tweet[:tweet_id], :format => :html
+                response.should_not be_successful
+                response.code.should == '415'
+            end
+
+            it "should return a 404 if tweet not found" do
+                post :like, :tweet_id => '555', :format => :v1_json
+
+                error['code'].should == "404"
+                error['message'].should == 'cannot find tweet'
+                error['description'].should == 'tweet with id 555 cannot be found'
+            end
+
+            it "should set the tweet status to 'liked'" do
+                tweet['status'].should == 'liked'
+            end
+
+            it "should give the option to dislike the tweet" do
+                actions.count.should == 1
+                actions[0]['rel'].should == 'dislike'
+            end
+        end
+
+        describe "POST 'dislike'" do
+            before (:each) do
+                @id = '123'
+                @text = "@lonestardev check out what @buddy did: bit.ly/1234. It's amazing!"
+                @originator = "my_friend"
+                @retweet_count = 0
+                @reply_to = 'lonestardev'
+
+                @tweet = {
+                    :tweet_id => @id,
+                    :originator => @originator,
+                    :reply_to => @reply_to,
+                    :retweet_count => @retweet_count,
+                    :text => @text
+                }
+
+                post :create, :tweet => @tweet.to_json, :format => :html
+                post :dislike, :tweet_id => @tweet[:tweet_id], :format => :v1_json
+            end
+
+            it "should be respond with json" do
+                test_tweet_response
+            end
+
+            it "should return a 415 unsupported media type if not proper format" do
+                post :like, :tweet_id => @tweet[:tweet_id], :format => :html
+                response.should_not be_successful
+                response.code.should == '415'
+            end
+
+            it "should return a 404 if tweet not found" do
+                post :dislike, :tweet_id => '555', :format => :v1_json
+
+                error['code'].should == "404"
+                error['message'].should == 'cannot find tweet'
+                error['description'].should == 'tweet with id 555 cannot be found'
+            end
+
+            it "should set the tweet status to 'disliked'" do
+                tweet['status'].should == 'disliked'
+            end
+
+            it "should give the option to like the tweet" do
+                actions.count.should == 1
+                actions[0]['rel'].should == 'like'
+            end
         end
 
         def test_tweet_response
@@ -160,5 +276,9 @@ describe TweetsController do
 
     def tweet
         content['tweet']
+    end
+
+    def actions
+        tweet['actions']
     end
 end

@@ -38,6 +38,42 @@ class TweetsController < ApplicationController
         end
     end
 
+    def like
+        tweet_id = params[:tweet_id]
+        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
+
+        if @tweet == nil
+            error = get_error '404',
+                              'cannot find tweet',
+                              "tweet with id #{tweet_id} cannot be found"
+        else
+            @tweet.like
+        end
+
+        respond_to do |format|
+            format.v1_json { render v1_json: @tweet, error: error }
+            format.any { render v1_json: @tweet, status: 415 }
+        end
+    end
+
+    def dislike
+        tweet_id = params[:tweet_id]
+        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
+
+        if @tweet == nil
+            error = get_error '404',
+                              'cannot find tweet',
+                              "tweet with id #{tweet_id} cannot be found"
+        else
+            @tweet.dislike
+        end
+
+        respond_to do |format|
+            format.v1_json { render v1_json: @tweet, error: error }
+            format.any { render v1_json: @tweet, status: 415 }
+        end
+    end
+
     def show
         @tweet = Tweet.first(conditions: {tweet_id: "#{params[:id]}"})
 
@@ -67,7 +103,12 @@ ActionController::Renderers.add(:v1_json) do |obj, options|
         body += '"error":' + error + ','
     end
 
-    body += '"content":' + obj.to_v1.to_json
+    content = '"nil"'
+    if obj != nil
+        content = obj.to_v1.to_json
+    end
+
+    body += '"content":' + content
     body += '}'
 
     self.response_body = body 
