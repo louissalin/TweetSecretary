@@ -22,7 +22,7 @@ class TweetsController < ApplicationController
 
         error = nil
 
-        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
+        @tweet = find_tweet(tweet_id)
         if @tweet == nil
             @tweet = TweetHelper.create_tweet current_user, tweet_id, originator, text, retweet_count
             @tweet.save
@@ -39,43 +39,15 @@ class TweetsController < ApplicationController
     end
 
     def like
-        tweet_id = params[:tweet_id]
-        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
-
-        if @tweet == nil
-            error = get_error '404',
-                              'cannot find tweet',
-                              "tweet with id #{tweet_id} cannot be found"
-        else
-            @tweet.like
-        end
-
-        respond_to do |format|
-            format.v1_json { render v1_json: @tweet, error: error }
-            format.any { render v1_json: @tweet, status: 415 }
-        end
+        perform_action_on_tweet {|tweet| tweet.like}
     end
 
     def dislike
-        tweet_id = params[:tweet_id]
-        @tweet = Tweet.first(conditions: {tweet_id: tweet_id})
-
-        if @tweet == nil
-            error = get_error '404',
-                              'cannot find tweet',
-                              "tweet with id #{tweet_id} cannot be found"
-        else
-            @tweet.dislike
-        end
-
-        respond_to do |format|
-            format.v1_json { render v1_json: @tweet, error: error }
-            format.any { render v1_json: @tweet, status: 415 }
-        end
+        perform_action_on_tweet {|tweet| tweet.dislike}
     end
 
     def show
-        @tweet = Tweet.first(conditions: {tweet_id: "#{params[:id]}"})
+        @tweet = find_tweet(params[:id])
 
         respond_to do |format|
             format.v1_json { render v1_json: @tweet }
@@ -89,6 +61,28 @@ private
             :message => message,
             :description => description
         }
+    end
+
+    def perform_action_on_tweet
+        tweet_id = params[:tweet_id]
+        @tweet = find_tweet(tweet_id)
+
+        if @tweet == nil
+            error = get_error '404',
+                              'cannot find tweet',
+                              "tweet with id #{tweet_id} cannot be found"
+        else
+            yield @tweet
+        end
+
+        respond_to do |format|
+            format.v1_json { render v1_json: @tweet, error: error }
+            format.any { render v1_json: @tweet, status: 415 }
+        end
+    end
+
+    def find_tweet(tweet_id)
+        Tweet.first(conditions: {tweet_id: tweet_id})
     end
 end
 
