@@ -10,6 +10,7 @@ gem "twitter-bootstrap-rails"
 gem "heroku"
 gem 'jquery-rails'
 gem "haml", ">= 3.1.2"
+gem "kaminari"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

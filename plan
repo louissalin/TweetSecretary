@@ -1,5 +1,4 @@
-page tweets on the untrained list
-show latest 20 on trained list
+clean up the links when liking/disliking a tweet
 come up with strategy for ajax calls in haml views. I don't like cramming stuff in "onclick"
 look up originator via twitter api to get display name, avatar. Cache and use for display.
 

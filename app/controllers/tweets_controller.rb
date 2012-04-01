@@ -8,9 +8,14 @@ class TweetsController < ApplicationController
         # show login page if user not logged in
         # else show html page with initial payload of tweets in json format
         # the page will have javascript to load tweets are they come in (eventually...)
+       
+        page = params[:page] || 1
+        per = params[:per_page] || 9
 
-        @tweets = Tweet.limit(20)
-        @trained_tweets = Tweet.order_by([[:trained_timestamp, :desc]]).limit(10).each {|t| puts t.inspect}
+        @tweets = Tweet.where(:trained_timestamp => nil).page(page)
+        @trained_tweets = Tweet.where(:trained_timestamp.ne => nil)
+                               .order_by([[:trained_timestamp, :desc]])
+                               .limit(9).each {|t| puts t.inspect}
     end
 
     def create
