@@ -12,13 +12,16 @@ class Tweet
   field :is_my_reply, :type => Boolean
   field :mentions, :type => Hash
   field :status, :type => String
+  field :trained_timestamp, :type => DateTime
 
   def like
       self.status = 'liked'
+      self.trained_timestamp = Time.now
   end
 
   def dislike
       self.status = 'disliked'
+      self.trained_timestamp = Time.now
   end
 
   def to_v1
@@ -34,7 +37,8 @@ class Tweet
             is_my_reply: self.is_my_reply,
             mentions: self.mentions,
             status: self.status,
-            actions: get_actions
+            actions: get_actions,
+            trained_timestamp: self.trained_timestamp.to_s
           }
       }
   end

@@ -4,7 +4,9 @@
   .text
     #{tweet.text}
   .actions
-    - if tweet.status == 'liked' || tweet.status == 'unknown'
-      %a{title: 'Dislike',  href: '/', onclick: "dislike('#{tweet.tweet_id}', '#{tweet_url(tweet.tweet_id)}/'); return false;"} Dislike
     - if tweet.status == 'disliked' || tweet.status == 'unknown'
       %a{title: 'Like', href: '/', onclick: "like('#{tweet.tweet_id}', '#{tweet_url(tweet.tweet_id)}/'); return false;"} Like
+    - if tweet.status == 'unknown'
+      | 
+    - if tweet.status == 'liked' || tweet.status == 'unknown'
+      %a{title: 'Dislike',  href: '/', onclick: "dislike('#{tweet.tweet_id}', '#{tweet_url(tweet.tweet_id)}/'); return false;"} Dislike

@@ -1,13 +1,13 @@
 - if user_signed_in?
   .row
     .filtered.tweets.span6
-      %h3 Filtered
+      %h3 Untrained
       - @tweets.each do |tweet|
         = render partial: "tweets/tweet", locals: { :tweet => tweet }
 
     .skipped.tweets.span6
-      %h3 Unfiltered
-      - @tweets.each do |tweet|
+      %h3 Trained
+      - @trained_tweets.each do |tweet|
         = render partial: "tweets/tweet", locals: { :tweet => tweet }
 - else
   .content please sign in to view your tweets

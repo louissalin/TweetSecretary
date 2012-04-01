@@ -10,7 +10,8 @@ class TweetHelper
             :retweet_count => retweet_count,
             :is_my_reply => is_my_reply(current_user, text),
             :mentions => extract_mentions(text),
-            :status => 'unknown'
+            :status => 'unknown',
+            :trained_timestamp => nil
         }
 
         Tweet.create!(attrs)

@@ -31,20 +31,23 @@ describe Tweet do
                 :urls => nil,
                 :is_my_reply => false,
                 :mentions => nil,
-                :status => 'unknown'
+                :status => 'unknown',
+                :trained_timestamp => nil
             }
 
             @tweet = Tweet.create!(@attr)
         end
 
-        it "liking a tweet should set its status to 'liked'" do
+        it "liking a tweet should set its status to 'liked' and update the timestamp" do
             @tweet.like
             @tweet.status.should == 'liked'
+            @tweet.trained_timestamp.to_s.should include(Time.now.strftime('%Y-%m-%dT%H:%M:%S'))
         end
 
-        it "disliking a tweet should set its status to 'disliked'" do
+        it "disliking a tweet should set its status to 'disliked' and update the timestamp" do
             @tweet.dislike
             @tweet.status.should == 'disliked'
+            @tweet.trained_timestamp.to_s.should include(Time.now.strftime('%Y-%m-%dT%H:%M:%S'))
         end
     end
 end

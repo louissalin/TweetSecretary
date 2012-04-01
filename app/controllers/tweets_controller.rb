@@ -10,6 +10,7 @@ class TweetsController < ApplicationController
         # the page will have javascript to load tweets are they come in (eventually...)
 
         @tweets = Tweet.limit(20)
+        @trained_tweets = Tweet.order_by([[:trained_timestamp, :desc]]).limit(10).each {|t| puts t.inspect}
     end
 
     def create

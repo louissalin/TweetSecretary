@@ -205,7 +205,8 @@ describe TweetsController do
                     :originator => @originator,
                     :reply_to => @reply_to,
                     :retweet_count => @retweet_count,
-                    :text => @text
+                    :text => @text,
+                    :trained_timestamp => nil
                 }
 
                 post :create, :tweet => @tweet.to_json, :format => :html
@@ -242,6 +243,11 @@ describe TweetsController do
             it "should give the option to like the tweet" do
                 actions.count.should == 1
                 actions[0]['rel'].should == 'like'
+            end
+
+            it "should set the trained_timestamp value" do
+                get 'show', :id => '123', :format => :v1_json
+                tweet['trained_timestamp'].should include(Time.now.strftime('%Y-%m-%dT%H:%M:%S'))
             end
         end
 
