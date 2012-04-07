@@ -30,6 +30,7 @@ describe TweetHelper do
             @tweet.urls[0].should == "bit.ly/1234"
             @tweet.mentions[0].should == "lonestardev"
             @tweet.mentions[1].should == "buddy"
+            @tweet.owner.should == 'lp@lp.com'
         end
 
         it "should set the status of the tweet to 'unknown'" do

@@ -32,7 +32,8 @@ describe Tweet do
                 :is_my_reply => false,
                 :mentions => nil,
                 :status => 'unknown',
-                :trained_timestamp => nil
+                :trained_timestamp => nil,
+                :owner => 'louis.phil@gmail.com'
             }
 
             @tweet = Tweet.create!(@attr)

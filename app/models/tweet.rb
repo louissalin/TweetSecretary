@@ -13,6 +13,7 @@ class Tweet
   field :mentions, :type => Hash
   field :status, :type => String
   field :trained_timestamp, :type => DateTime
+  field :owner, :type => String
 
   def like
       self.status = 'liked'

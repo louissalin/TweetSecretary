@@ -1,7 +1,10 @@
 require 'spec_helper'
 require 'helpers/tweet_helper.rb'
+require "#{File.dirname(__FILE__)}/response_queries.rb"
 
 describe TweetsController do
+    include ResponseQueries
+
     describe "when not logged in on the site" do
         describe "GET 'index'" do
             it "should be successful" do
@@ -277,24 +280,4 @@ describe TweetsController do
             #end
         #end
     #end
-
-    def body 
-        body = JSON.parse(response.body)
-    end
-
-    def content
-        body['content']
-    end
-
-    def error
-        body['error']
-    end
-
-    def tweet
-        content['tweet']
-    end
-
-    def actions
-        tweet['actions']
-    end
 end

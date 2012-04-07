@@ -11,7 +11,8 @@ class TweetHelper
             :is_my_reply => is_my_reply(current_user, text),
             :mentions => extract_mentions(text),
             :status => 'unknown',
-            :trained_timestamp => nil
+            :trained_timestamp => nil,
+            :owner => current_user.email
         }
 
         Tweet.create!(attrs)

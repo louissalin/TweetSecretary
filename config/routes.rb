@@ -5,6 +5,7 @@ Tweetdisplay::Application.routes.draw do
 
   devise_for :users
   resources :users, :only => :show
+  resources :training_set, :only => :index
   resources :tweets, :only => [:index, :show, :create, :update] do
       member do
           post 'like'

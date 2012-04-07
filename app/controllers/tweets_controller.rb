@@ -4,6 +4,9 @@ class TweetsController < ApplicationController
     respond_to :v1_json
     respond_to :html, :only => [:index]
 
+    # GET
+    # ---
+
     def index
         # show login page if user not logged in
         # else show html page with initial payload of tweets in json format
@@ -18,6 +21,17 @@ class TweetsController < ApplicationController
                                .limit(9).each {|t| puts t.inspect}
     end
 
+    def show
+        @tweet = find_tweet(params[:id])
+
+        respond_to do |format|
+            format.v1_json { render v1_json: @tweet }
+        end
+    end
+
+    # POST
+    # ----
+
     def create
         t = JSON.parse(params[:tweet])
         tweet_id = t['tweet_id']
@@ -31,7 +45,6 @@ class TweetsController < ApplicationController
         @tweet = find_tweet(tweet_id)
         if @tweet == nil
             @tweet = TweetHelper.create_tweet current_user, tweet_id, originator, text, retweet_count
-            @tweet.save
         else
             error = get_error '405',
                               'cannot create tweet',
@@ -53,14 +66,6 @@ class TweetsController < ApplicationController
         tweet_id = params[:id]
         update_tweet_params(tweet_id) {|tweet| tweet.dislike}
     end
-
-    def show
-        @tweet = find_tweet(params[:id])
-
-        respond_to do |format|
-            format.v1_json { render v1_json: @tweet }
-        end
-   end
 
 private
     def get_error(code, message, description)
@@ -94,24 +99,3 @@ private
     end
 end
 
-ActionController::Renderers.add(:v1_json) do |obj, options|
-    self.content_type ||= Mime::Type.lookup('application/vnd.tweetsecretary-v1+json')
-
-    body = '{'
-    if options[:error] != nil
-        error = options[:error]
-        error = error.to_json unless error.respond_to?(:to_str)
-
-        body += '"error":' + error + ','
-    end
-
-    content = '"nil"'
-    if obj != nil
-        content = obj.to_v1.to_json
-    end
-
-    body += '"content":' + content
-    body += '}'
-
-    self.response_body = body 
-end
